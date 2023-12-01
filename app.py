@@ -6,7 +6,6 @@ import os
 from PIL import Image
 import requests
 from io import BytesIO
-import matplotlib.pyplot as plt
 
 
 
@@ -78,7 +77,7 @@ def generate_stable_diff_response(prompt_input):
     url = str(url).replace('[','').replace(']','').replace("'","").replace("\"", "")
     output = requests.get(url)
     img = Image.open(BytesIO(output.content))
-    return plt.imshow(img)
+    return st.image(img)
 
 
 # User-provided prompt
