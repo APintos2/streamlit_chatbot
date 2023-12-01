@@ -74,7 +74,8 @@ def generate_stable_diff_response(prompt_input):
     "stability-ai/stable-diffusion:ac732df83cea7fff18b8472768c88ad041fa750ff7682a21affe81863cbe77e4",
     input={"prompt": f"{prompt_input}"}
 )
-    output = requests.get(url[0])
+    url = str(url).replace('[','').replace(']','').replace("'","")
+    output = requests.get(url)
     img = Image.open(BytesIO(output.content))
     return img
 
@@ -106,7 +107,7 @@ if (selected_model == 'Llama2-7B') or (selected_model == 'Llama2-13B'):
 elif selected_model == 'Stable-Diffusion':
     if st.session_state.messages[-1]["role"] != "assistant":
         with st.chat_message("assistant"):
-            with st.spinner("Thinking..."):
+            with st.spinner("Drawing..."):
                 response = generate_stable_diff_response(prompt)
                 placeholder = st.empty()
                 full_response = ''
