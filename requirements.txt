@@ -3,4 +3,4 @@ replicate
 PIL
 requests
 io
-matplotlib.pyplot
+matplotlib
