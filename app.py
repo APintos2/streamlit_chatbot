@@ -62,6 +62,14 @@ def generate_llama2_response(prompt_input):
                                   "temperature":temperature, "top_p":top_p, "max_length":max_length, "repetition_penalty":1})
     return output
 
+def generate_stable_diff_response(prompt_input):
+    output = replicate.run(
+    "stability-ai/stable-diffusion:ac732df83cea7fff18b8472768c88ad041fa750ff7682a21affe81863cbe77e4",
+    input={"prompt": f"{prompt_input}"}
+)
+    return output
+
+
 # User-provided prompt
 if prompt := st.chat_input(disabled=not replicate_api):
     st.session_state.messages.append({"role": "user", "content": prompt})
@@ -69,23 +77,36 @@ if prompt := st.chat_input(disabled=not replicate_api):
         st.write(prompt)
 
 # Generate a new response if last message is not from assistant
-if st.session_state.messages[-1]["role"] != "assistant":
-    with st.chat_message("assistant"):
-        with st.spinner("Thinking..."):
-            response = generate_llama2_response(prompt)
-            placeholder = st.empty()
-            full_response = ''
-            for item in response:
-                full_response += item
-                placeholder.markdown(full_response)
-            placeholder.markdown(full_response)
-    message = {"role": "assistant", "content": full_response}
-    st.session_state.messages.append(message)
 
-def generate_stable_diff_response(prompt_input):
-    output = replicate.run(
-    "stability-ai/stable-diffusion:ac732df83cea7fff18b8472768c88ad041fa750ff7682a21affe81863cbe77e4",
-    input={"prompt": f"{prompt_input}"}
-)
-    return output
+if (selected_model == 'Llama2-7B') or (selected_model == 'Llama2-13B'):
+         
+
+    if st.session_state.messages[-1]["role"] != "assistant":
+        with st.chat_message("assistant"):
+            with st.spinner("Thinking..."):
+                response = generate_llama2_response(prompt)
+                placeholder = st.empty()
+                full_response = ''
+                for item in response:
+                    full_response += item
+                    placeholder.markdown(full_response)
+                placeholder.markdown(full_response)
+        message = {"role": "assistant", "content": full_response}
+        st.session_state.messages.append(message)
+
+elif selected_model == 'Stable-Diffusion':
+    if st.session_state.messages[-1]["role"] != "assistant":
+        with st.chat_message("assistant"):
+            with st.spinner("Thinking..."):
+                response = generate_stable_diff_response(prompt)
+                placeholder = st.empty()
+                full_response = ''
+                for item in response:
+                    full_response += item
+                    placeholder.markdown(full_response)
+                placeholder.markdown(full_response)
+        message = {"role": "assistant", "content": full_response}
+        st.session_state.messages.append(message)
+
+
 
