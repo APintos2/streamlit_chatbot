@@ -74,7 +74,7 @@ def generate_stable_diff_response(prompt_input):
     "stability-ai/stable-diffusion:ac732df83cea7fff18b8472768c88ad041fa750ff7682a21affe81863cbe77e4",
     input={"prompt": f"{prompt_input}"}
 )
-    url = str(url).replace('[','').replace(']','').replace("'","")
+    # url = str(url).replace('[','').replace(']','').replace("'","")
     output = requests.get(url)
     img = Image.open(BytesIO(output.content))
     return img
