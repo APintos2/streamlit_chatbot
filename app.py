@@ -3,6 +3,13 @@ api_token = "r8_f6P3rpb7SOqZAwN4S8GvursSpl7St620181I4"
 import streamlit as st
 import replicate
 import os
+from PIL import Image
+import requests
+from io import BytesIO
+
+
+
+
 
 # App title
 st.set_page_config(page_title="🦙💬 Llama 2 Chatbot")
@@ -63,11 +70,13 @@ def generate_llama2_response(prompt_input):
     return output
 
 def generate_stable_diff_response(prompt_input):
-    output = replicate.run(
+    url = replicate.run(
     "stability-ai/stable-diffusion:ac732df83cea7fff18b8472768c88ad041fa750ff7682a21affe81863cbe77e4",
     input={"prompt": f"{prompt_input}"}
 )
-    return output
+    output = requests.get(url)
+    img = Image.open(BytesIO(output.content))
+    return img
 
 
 # User-provided prompt
